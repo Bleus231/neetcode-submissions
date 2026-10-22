@@ -1,0 +1,29 @@
+from collections import deque
+
+class Solution:
+    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+        
+
+
+        adj = [[] for _ in range(numCourses)]
+        in_degree = [0] * numCourses
+        order = []
+
+        for a,b in prerequisites:
+            adj[b].append(a)
+            in_degree[a] += 1
+
+        queue = deque(i for i in range(numCourses) if in_degree[i] == 0)
+
+        while queue:
+            curr = queue.popleft()
+            order.append(curr)
+
+            for neighbor in adj[curr]:
+                in_degree[neighbor] -= 1
+                if in_degree[neighbor] == 0:
+                    queue.append(neighbor)
+        
+        return order if len(order) == numCourses else []
+
+
